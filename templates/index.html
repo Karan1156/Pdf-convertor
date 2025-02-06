@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Image Processor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <style>
+    
+
+
+    .container1 {
+      max-height: 300px; /* Set a height for scrolling */
+      overflow-y: auto; /* Enables vertical scrolling */
+      border: 1px solid #ccc; /* Optional: Add a border for clarity */
+      padding: 10px;
+    }
+  </style>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">Image To Pdf Convertor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+
+    <div class="container mt-5 ">
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+      <div class="alert alert-warning">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message | safe }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+    </div>
+
+
+    <div class="card-header bg-success text-white">
+      <h4 class="mb-0">Upload and Process Your Image</h4>
+    </div>
+
+
+
+    <div class="main-container">
+      <div class="form">
+        <div class="card-body">
+          <form action="/img" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="fileInput" class="form-label">Select Image File</label>
+              <input class="form-control" type="file" id="fileInput" name="file" required>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Upload Image</button>
+              <a href="/compile"
+                style="text-align: center; color:#fff; background-color:rgb(36, 36, 167); margin-top:5px; padding:5px; border-radius:10px;">Download</a>
+            </div>
+          </form>
+        </div>
+
+      </div>
+      <div class="container">
+        <h2 class="text-center mb-4">Uploaded Images</h2>
+        <form action="/discard" method="post">
+          <div class="row justify-content-center container1">
+            {% for image in images %}
+            <div class="col-md-3 col-sm-6 mb-4 text-center">
+              <div class="card shadow-sm">
+                <img src="{{ url_for('static', filename=image) }}" alt="{{ image }}" class="card-img-top"
+                  style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                  <label>
+                    <input type="checkbox" name="discarded_images" value="{{ image }}"> Discard
+                  </label>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-danger">Remove Selected Images</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Uploaded Images -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"></script>
+  </body>
+
+</html>
